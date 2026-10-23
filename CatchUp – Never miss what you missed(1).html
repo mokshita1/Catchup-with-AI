@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CatchUp – Never miss what you missed</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ff;--card:#fff;--ink:#1d1740;--mute:#6f6a8f;--line:#e6e1fa;--pri:#6c4cff;--pri2:#ff6b9d;--ok:#18b37e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13102a;--card:#1d1940;--ink:#f1eeff;--mute:#a49fcb;--line:#322d63}}
+:root[data-theme="dark"]{--bg:#13102a;--card:#1d1940;--ink:#f1eeff;--mute:#a49fcb;--line:#322d63}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit,system-ui,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+.grad{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
+.btn{padding:11px 18px;border-radius:14px;font-weight:600;background:var(--pri);color:#fff;transition:.15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px #6c4cff44}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:7px 12px;font-size:.85rem;border-radius:10px}
+input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pri)}
+.login{min-height:90vh;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.logo{font-size:3rem;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--pri),var(--pri2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.role{padding:12px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);text-align:left;font-weight:600}
+.role.on{border-color:var(--pri);background:#6c4cff1a}
+.hero{border-radius:24px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 4px;font-size:1.6rem}.hero p{margin:0;opacity:.9}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.grid{display:grid;gap:12px}
+.cls{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.15s}
+.cls:hover{transform:translateY(-3px);box-shadow:0 10px 24px #6c4cff22}
+.ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem;flex:none}
+.cls .t{flex:1;min-width:0}.cls b{display:block;font-size:1.1rem}.cls small{color:var(--mute)}
+.x{background:none;font-size:1.1rem;padding:8px;border-radius:10px;color:var(--mute)}.x:hover{background:#ff4d6d22;color:#ff4d6d}
+.empty{text-align:center;color:var(--mute);padding:40px 10px}
+.chead{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0}
+.chip{padding:6px 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);white-space:nowrap;font-size:.85rem;font-weight:600}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.msg{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin:10px 0;border-left:6px solid var(--c)}
+.msg .meta{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--mute);margin-bottom:6px;flex-wrap:wrap}
+.tag{background:var(--c);color:#fff;padding:2px 9px;border-radius:99px;font-weight:600;font-size:.75rem}
+.role-b{background:var(--line);color:var(--ink);padding:2px 8px;border-radius:99px;font-size:.72rem}
+.msg p{margin:0;white-space:pre-wrap;word-break:break-word}
+.msg .x{margin-left:auto;padding:2px 8px}
+.bring{display:flex;gap:10px;align-items:flex-start}.bring input{width:20px;height:20px;margin-top:2px;accent-color:var(--ok)}
+.bring.done p{text-decoration:line-through;opacity:.55}
+.comp{position:sticky;bottom:env(safe-area-inset-bottom,0px);background:var(--bg);padding:10px 0;border-top:1px solid var(--line)}
+.row{display:flex;gap:8px;margin-top:8px}
+.modal{position:fixed;inset:0;background:#0009;display:none;place-items:center;z-index:20;padding:16px}
+.modal.show{display:grid}
+.box{background:var(--card);border-radius:22px;padding:20px;width:100%;max-width:420px;max-height:85vh;overflow:auto}
+.box h3{margin:0 0 12px}.box label{display:block;margin:10px 0 4px;font-weight:600;font-size:.9rem}
+.picks{display:flex;gap:6px;flex-wrap:wrap}.pk{font-size:1.4rem;padding:6px 9px;border-radius:12px;background:var(--bg);border:2px solid transparent}
+.pk.on{border-color:var(--pri)}.sw{width:30px;height:30px;border-radius:50%;border:3px solid transparent}.sw.on{border-color:var(--ink)}
+.mem{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.mem span{flex:1}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-150%);padding:12px 20px;border-radius:99px;z-index:30;transition:.5s;font-weight:600;box-shadow:0 10px 30px #0004}
+.toast.show{transform:translate(-50%,0)}
+.hide{display:none!important}
+</style></head><body>
+<div id="toast" class="toast grad"></div>
+<div class="wrap" id="app"></div>
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+<script>
+const ROLES=[["Classmate","🎒"],["Teacher","🍎"],["Peer Mentor","🧭"],["Class Rep","📣"]];
+const TYPES={recap:["📝 Recap","#6c4cff"],exam:["🎯 Exam","#e5384f"],quiz:["⚡ Quiz","#f59e0b"],mastery:["🏅 Mastery Check","#0ea5a4"],homework:["📚 Homework","#2f7de1"],bring:["🎒 Bring","#18b37e"]};
+const ICONS=["📘","🧪","🧮","🌍","🎨","💻","🎵","⚽","📖","🔬"],COLORS=["#6c4cff","#ff6b9d","#18b37e","#f59e0b","#2f7de1","#e5384f"];
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S={user:null,classes:[],active:null,filter:"all"},pick={icon:ICONS[0],color:COLORS[0]},role0="Classmate";
+try{const d=JSON.parse(localStorage.getItem("catchup")||"null");if(d)S=Object.assign(S,d,{filter:"all"})}catch(e){}
+const save=()=>{try{localStorage.setItem("catchup",JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),3200)}
+function greet(){const h=new Date().getHours();return h<12?"Good morning":h<18?"Good afternoon":"Good evening"}
+function seed(){const me=S.user;return [{id:uid(),name:"Biology 101",icon:"🧪",color:"#18b37e",members:[{name:me.name,role:me.role},{name:"Ms. Rivera",role:"Teacher"},{name:"Jordan",role:"Class Rep"}],msgs:[
+{id:uid(),by:"Jordan",role:"Class Rep",type:"recap",text:"Today we covered cell division: mitosis vs. meiosis. Ms. Rivera drew the 4 phases on the board – PMAT!",ts:Date.now()-7200000},
+{id:uid(),by:"Ms. Rivera",role:"Teacher",type:"quiz",text:"Short quiz on cell structure next Tuesday (10 questions).",ts:Date.now()-6000000},
+{id:uid(),by:"Jordan",role:"Class Rep",type:"homework",text:"Workbook pages 42–45, due Friday.",ts:Date.now()-5000000},
+{id:uid(),by:"Jordan",role:"Class Rep",type:"bring",text:"Bring colored pencils + lab notebook",ts:Date.now()-4000000,done:false}]}]}
+function render(){const a=$("app");if(!S.user)return login(a);S.active&&S.classes.find(c=>c.id===S.active)?chat(a):home(a)}
+function login(a){a.innerHTML=`<div class="login"><div class="logo">CatchUp 🚀</div><p style="color:var(--mute);margin:0">Missed class? Get the recap, deadlines and what to bring – from your classmates, teachers and mentors.</p>
+<input id="nm" placeholder="Your name" maxlength="30"><b>I am a…</b><div class="roles">${ROLES.map(r=>`<button class="role ${r[0]==role0?"on":""}" data-r="${r[0]}">${r[1]} ${r[0]}</button>`).join("")}</div>
+<button class="btn" id="go">Let's go →</button></div>`;
+a.querySelectorAll(".role").forEach(b=>b.onclick=()=>{role0=b.dataset.r;a.querySelectorAll(".role").forEach(x=>x.classList.toggle("on",x==b))});
+$("go").onclick=()=>{const n=$("nm").value.trim();if(!n){$("nm").focus();return toast("Please enter your name")}
+S.user={name:n,role:role0};S.classes=seed();S.active=null;save();render();toast(greet()+", "+n+" 👋 Let's catch you up!")}}
+function home(a){a.innerHTML=`<div class="top"><div class="logo" style="font-size:1.8rem">CatchUp</div><div><button class="btn ghost sm" id="th">🌓</button> <button class="btn ghost sm" id="out">Log out</button></div></div>
+<div class="hero grad"><h2>${greet()}, ${esc(S.user.name)} 👋</h2><p>${ROLES.find(r=>r[0]==S.user.role)[1]} ${S.user.role} · ${S.classes.length} class${S.classes.length==1?"":"es"}. Pick one to see what you missed.</p></div>
+<div class="top"><b style="font-size:1.2rem">My classes</b><button class="btn" id="add">＋ New class</button></div>
+<div class="grid">${S.classes.map(c=>`<div class="cls" data-id="${c.id}"><div class="ico" style="background:${c.color}22">${c.icon}</div><div class="t"><b>${esc(c.name)}</b><small>${c.members.length} people · ${c.msgs.length} updates</small></div><button class="x" data-del="${c.id}" title="Delete">🗑</button></div>`).join("")||`<div class="empty">No classes yet.<br>Tap “＋ New class” to start your first chat ✨</div>`}</div>`;
+$("add").onclick=addClass;$("out").onclick=()=>{S.user=null;S.classes=[];S.active=null;save();render()};
+$("th").onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue("--bg").trim()=="#13102a";r.dataset.theme=d?"light":"dark"};
+a.querySelectorAll(".cls").forEach(e=>e.onclick=ev=>{const d=ev.target.closest("[data-del]");if(d){ev.stopPropagation();return delClass(d.dataset.del)}S.active=e.dataset.id;S.filter="all";save();render()})}
+function modal(h){$("box").innerHTML=h;$("modal").classList.add("show")}
+function closeModal(){$("modal").classList.remove("show")}
+$("modal").onclick=e=>{if(e.target.id=="modal")closeModal()};
+function addClass(){pick={icon:ICONS[0],color:COLORS[0]};modal(`<h3>New class chat</h3><label>Class name</label><input id="cn" placeholder="e.g. Algebra II" maxlength="30"><label>Icon</label><div class="picks" id="ip">${ICONS.map(i=>`<button class="pk ${i==pick.icon?"on":""}" data-i="${i}">${i}</button>`).join("")}</div>
+<label>Color</label><div class="picks" id="cp">${COLORS.map(c=>`<button class="sw ${c==pick.color?"on":""}" data-c="${c}" style="background:${c}"></button>`).join("")}</div>
+<div class="row"><button class="btn ghost" style="flex:1" onclick="closeModal()">Cancel</button><button class="btn" style="flex:1" id="cc">Create</button></div>`);
+$("ip").onclick=e=>{const b=e.target.closest("[data-i]");if(!b)return;pick.icon=b.dataset.i;$("ip").querySelectorAll(".pk").forEach(x=>x.classList.toggle("on",x==b))};
+$("cp").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;pick.color=b.dataset.c;$("cp").querySelectorAll(".sw").forEach(x=>x.classList.toggle("on",x==b))};
+$("cc").onclick=()=>{const n=$("cn").value.trim();if(!n)return $("cn").focus();S.classes.unshift({id:uid(),name:n,icon:pick.icon,color:pick.color,members:[{name:S.user.name,role:S.user.role}],msgs:[]});save();closeModal();render();toast("Class created ✨")}}
+function delClass(id){const c=S.classes.find(x=>x.id==id);modal(`<h3>Delete “${esc(c.name)}”?</h3><p style="color:var(--mute)">The whole chat and its updates will be removed. This can’t be undone.</p><div class="row"><button class="btn ghost" style="flex:1" onclick="closeModal()">Keep it</button><button class="btn" style="flex:1;background:#e5384f" id="yes">Delete</button></div>`);
+$("yes").onclick=()=>{S.classes=S.classes.filter(x=>x.id!=id);if(S.active==id)S.active=null;save();closeModal();render();toast("Class deleted")}}
+function chat(a){const c=S.classes.find(x=>x.id==S.active),f=S.filter;
+const list=c.msgs.filter(m=>f=="all"||m.type==f);
+a.innerHTML=`<div class="chead"><div class="top"><button class="btn ghost sm" id="bk">← Back</button><b style="font-size:1.15rem">${c.icon} ${esc(c.name)}</b><button class="btn ghost sm" id="ppl">👥 ${c.members.length}</button></div>
+<div class="chips"><button class="chip ${f=="all"?"on":""}" data-f="all">All</button>${Object.entries(TYPES).map(([k,v])=>`<button class="chip ${f==k?"on":""}" data-f="${k}">${v[0]}</button>`).join("")}</div></div>
+<div id="msgs">${list.map(m=>{const t=TYPES[m.type];return `<div class="msg" style="--c:${t[1]}"><div class="meta"><span class="tag">${t[0]}</span><b style="color:var(--ink)">${esc(m.by)}</b><span class="role-b">${esc(m.role)}</span><span>${new Date(m.ts).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}</span><button class="x" data-m="${m.id}" title="Delete">✕</button></div>
+${m.type=="bring"?`<label class="bring ${m.done?"done":""}"><input type="checkbox" data-ck="${m.id}" ${m.done?"checked":""}><p>${esc(m.text)}</p></label>`:`<p>${esc(m.text)}</p>`}</div>`}).join("")||`<div class="empty">Nothing here yet.<br>Post the first update below 👇</div>`}</div>
+<div class="comp"><div class="row" style="margin:0 0 8px"><select id="by">${c.members.map(m=>`<option value="${esc(m.name)}|${esc(m.role)}">${esc(m.name)} (${esc(m.role)})</option>`).join("")}</select><select id="ty">${Object.entries(TYPES).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join("")}</select></div>
+<div class="row" style="margin:0"><textarea id="tx" rows="2" placeholder="What happened in class? Any exam, quiz, homework or things to bring?"></textarea><button class="btn" id="snd">Send</button></div></div>`;
+$("bk").onclick=()=>{S.active=null;save();render()};
+a.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{S.filter=b.dataset.f;render()});
+a.querySelectorAll("[data-ck]").forEach(i=>i.onchange=()=>{c.msgs.find(m=>m.id==i.dataset.ck).done=i.checked;save();render()});
+a.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{c.msgs=c.msgs.filter(m=>m.id!=b.dataset.m);save();render()});
+$("ppl").onclick=()=>people(c);
+$("snd").onclick=()=>{const t=$("tx").value.trim();if(!t)return $("tx").focus();const[by,role]=$("by").value.split("|");c.msgs.push({id:uid(),by,role,type:$("ty").value,text:t,ts:Date.now()});save();render();window.scrollTo(0,document.body.scrollHeight)}}
+function people(c){modal(`<h3>👥 People in ${esc(c.name)}</h3><div id="ml">${c.members.map((m,i)=>`<div class="mem"><span><b>${esc(m.name)}</b> <small style="color:var(--mute)">${esc(m.role)}</small></span>${i?`<button class="x" data-r="${i}">✕</button>`:""}</div>`).join("")}</div>
+<label>Add someone</label><input id="pn" placeholder="Name" maxlength="30"><select id="pr" style="margin-top:8px">${ROLES.map(r=>`<option>${r[0]}</option>`).join("")}</select>
+<div class="row"><button class="btn ghost" style="flex:1" onclick="closeModal()">Done</button><button class="btn" style="flex:1" id="pa">Add</button></div>`);
+$("ml").onclick=e=>{const b=e.target.closest("[data-r]");if(!b)return;c.members.splice(+b.dataset.r,1);save();people(c);render()};
+const addP=()=>{const n=$("pn").value.replace(/\|/g,"").trim();if(!n)return $("pn").focus();c.members.push({name:n,role:$("pr").value});save();people(c);render();toast(n+" added ✅");$("pn").focus()};$("pa").onclick=addP;$("pn").onkeydown=e=>{if(e.key=="Enter")addP()}}
+render();
+if(S.user)setTimeout(()=>toast(greet()+", "+S.user.name+" 👋 Welcome back!"),400);
+</script></body></html>
